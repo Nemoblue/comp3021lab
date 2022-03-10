@@ -3,9 +3,14 @@ package base;
 import java.io.File;
 
 public class TextNote extends Note{
-    private File image;
+    private String content;
 
     public TextNote(String title) {
         super(title);
     }
+
+    public TextNote(String title, String content) { super(title); this.content = content;}
+
+    public String getContent() { return content; }
+
 }

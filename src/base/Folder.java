@@ -1,9 +1,11 @@
 package base;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
-public class Folder {
+public class Folder implements Comparable<Folder>{
     private ArrayList<Note> notes;
     private String name;
 
@@ -63,4 +65,65 @@ public class Folder {
 			return false;
 		return true;
 	}
+
+    @Override
+    public int compareTo(Folder o) {
+        return this.getName().compareTo(o.getName());
+    }
+
+    public void sortNotes() {
+        notes.sort(Note::compareTo);
+    }
+
+    public List<Note> searchNotes(String keywords) {
+        String[] tokens = keywords.toLowerCase().split(" ");
+        ArrayList<ArrayList<String>> pattens = new ArrayList<ArrayList<String>>();
+        List<Note> foundNotes = new LinkedList<Note>();
+
+        for(int i = 0; i < tokens.length; i++) {
+            if(!tokens[i].equals("or")) {
+                ArrayList<String> patten = new ArrayList<String>();
+                patten.add(tokens[i]);
+                pattens.add(patten);
+            }
+            else {  // tokens[i] equals "or"
+                assert pattens.size() > 0 && i < tokens.length - 1;
+                pattens.get(pattens.size() - 1).add(tokens[i + 1]);
+                i = i + 1;
+            }
+        }
+
+//        for(ArrayList<String> patten: pattens){
+//            for(String keyword: patten){
+//                System.out.print(keyword + " ");
+//            }
+//            System.out.println();
+//        }
+
+        for(Note note: notes) {
+            boolean hasKey = true;
+            for(ArrayList<String> patten: pattens){
+                boolean temp = false;
+                for(String keyword: patten){
+                    if (note instanceof TextNote){
+                        if (note.getTitle().toLowerCase().contains(keyword) || ((TextNote) note).getContent().toLowerCase().contains(keyword))
+                            temp = true;
+                    }
+                    else {
+                        if (note.getTitle().toLowerCase().contains(keyword))
+                            temp = true;
+                    }
+                }
+
+                hasKey = temp;
+                if (!hasKey)
+                    break;
+            }
+
+            if(hasKey)
+                foundNotes.add(note);
+        }
+
+        return foundNotes;
+    }
 }
