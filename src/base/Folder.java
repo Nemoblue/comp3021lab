@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class Folder implements Comparable<Folder>{
+public class Folder implements Comparable<Folder>, java.io.Serializable{
     private ArrayList<Note> notes;
     private String name;
 
