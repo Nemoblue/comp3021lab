@@ -93,13 +93,6 @@ public class Folder implements Comparable<Folder>, java.io.Serializable{
             }
         }
 
-//        for(ArrayList<String> patten: pattens){
-//            for(String keyword: patten){
-//                System.out.print(keyword + " ");
-//            }
-//            System.out.println();
-//        }
-
         for(Note note: notes) {
             boolean hasKey = true;
             for(ArrayList<String> patten: pattens){
